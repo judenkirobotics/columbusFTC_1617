@@ -8,15 +8,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 /**
  * Created by judenki on 11/26/16.
- */
-
-
-
-
-
-
-/**
- * Created by Kernel Panic on 11/26/16.
+ *  revised by Juden-Ki mentors on 10 Jan 17.
+ *
+ *
  * Actuators and Sensors for Driver Control Mode
  */
 
@@ -31,8 +25,6 @@ public class JudenKiDriverMode extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         double forward;
         double drift;
-
-
         /*
          * Probably want to move this to platform class as both autonomous and driver use it.
         */
@@ -41,9 +33,6 @@ public class JudenKiDriverMode extends LinearOpMode {
         DcMotor[] leftMotors = new DcMotor[]{ robot.leftMotorFront, robot.leftMotorBack };
         DcMotor[] rightMotors = new DcMotor[]{ robot.rightMotorFront, robot.rightMotorBack};
         Drive myDrive = new Drive(leftMotors, rightMotors);
-
-
-
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Say", "Hello Drivers");    //
         telemetry.update();
@@ -53,21 +42,14 @@ public class JudenKiDriverMode extends LinearOpMode {
 
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
+            double prev_YStickPos = 0;
+            double prev_XStickPos = 0;
 
+            double overDrive = (gamepad1.right_bumper) ? 1.0 : 0.6;
+            forward = stickFilter(gamepad1.left_stick_y * overDrive, prev_YStickPos);
+            drift = stickFilter(gamepad1.left_stick_x, prev_XStickPos);
+            //forward = gamepad1.left_stick_y;
 
-
-            forward = gamepad1.left_stick_y;
-
-            //Smooth movement but still ends up being more of a pivot than a drift
-            //drift = gamepad1.left_stick_x * gamepad1.left_stick_x * gamepad1.left_stick_x * gamepad1.left_stick_x * gamepad1.left_stick_x;
-
-            //Try limiting it to 25% of total power
-            if (forward < .25) {
-                drift = gamepad1.left_stick_x;
-            }
-            else {
-                drift = gamepad1.left_stick_x * 0.25;
-            }
             myDrive.driveMove(forward, drift);
 
             //Actuate Catapult
@@ -108,6 +90,34 @@ public class JudenKiDriverMode extends LinearOpMode {
 
         // Reset the cycle clock for the next pass.
         period.reset();
+    }
+    /************************************************************************/
+    /*                     filter_input                                     */
+    /*      Read the inputs, post process them, and produce the             */
+    /*      output Motor Drive commands                                     */
+    /*   Inputs: stick position, previous stick position                    */
+    /*   Outputs: (return value)                                            */
+    /*   Returns:  Filtered stick position                                  */
+    /************************************************************************/
+    public double stickFilter(double inStick, double prevStickPos) {
+        double HI_FILT_CONST = 0.96;
+        double MID_FILT_CONST = 0.5;
+        double LOW_FILT_CONST = 0.1;
+        double filterConstant = 0;  /*init to zero just in case */
+        /* cube the input stick to give better response around zero */
+        instick = instick * instick * instick;
+        /* pick a filter constant based on stick position */
+        if (Math.abs(inStick) > 0.85) {
+            filterConstant = (double) HI_FILT_CONST;
+        } else if (Math.abs(inStick) > 0.6) {
+            filterConstant = (double) MID_FILT_CONST;
+        } else if (Math.abs(inStick) > 0.2) {
+            filterConstant = (double) LOW_FILT_CONST;
+        }
+	/*  Basic formula for a simple 1st order filter is:      */
+	/*      ((1-FC)* input) + (FC * prev_value)              */
+        prevStickPos = ((1 - filterConstant) * inStick) + (filterConstant * prevStickPos);
+        return (prevStickPos);
     }
 
 

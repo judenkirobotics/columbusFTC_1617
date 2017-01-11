@@ -7,8 +7,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 /**
  * Created by Juden-Ki mentor, 10 Jan 2017
 */
-@Autonomous(name="Juden-Ki Autonomous", group="Juden-Ki")
-public class JudenKiAutonomous  extends LinearOpMode {
+@Autonomous(name="Juden-Ki Autonomous Red", group="Juden-Ki")
+public class JudenKiAutonomousRED  extends LinearOpMode {
     //Juden Ki Launching Robot
     JudenKiPlatform robot = new JudenKiPlatform();
 

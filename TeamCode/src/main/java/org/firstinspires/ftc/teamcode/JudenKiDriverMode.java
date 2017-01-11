@@ -10,7 +10,6 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Created by judenki on 11/26/16.
  *  revised by Juden-Ki mentors on 10 Jan 17.
  *
- *
  * Actuators and Sensors for Driver Control Mode
  */
 

@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 /**
  * Created by judenki on 11/26/16.
-
+*/
 @Autonomous(name="Juden-Ki Autonomous", group="Juden-Ki")
 public class JudenKiAutonomous  extends LinearOpMode {
     //Juden Ki Launching Robot
@@ -14,27 +14,21 @@ public class JudenKiAutonomous  extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        int currentHeading;
-        int nextHeading;
 
         robot.init(hardwareMap);
         DcMotor[] leftMotors = new DcMotor[]{ robot.leftMotorFront, robot.leftMotorBack };
         DcMotor[] rightMotors = new DcMotor[]{ robot.rightMotorFront, robot.rightMotorBack};
         Drive myDrive = new Drive(leftMotors, rightMotors);
         waitForStart();
-// Move forward some
+        // Move forward some
         myDrive.moveForward(24 , 0.8);
         while (myDrive.motorsRunning() == true) {
             myDrive.update();
         }
 
         //Try to turn 45 degrees
-        currentHeading = robot.gyro.getHeading();
-        nextHeading = newHeading(currentHeading, 45);
-        myDrive.driveMove(0,0.5);
-        while(robot.gyro.getHeading() < nextHeading) {
-            //Kill some time
-        }
+        myDrive.gyroTurn2(45, 1);
+
         myDrive.allStop();
 
         //Move forward some more
@@ -42,7 +36,6 @@ public class JudenKiAutonomous  extends LinearOpMode {
         while (myDrive.motorsRunning() == true) {
             myDrive.update();
         }
-
     }
 
     public int newHeading (int currentHeading, int turnHeading) {
@@ -57,8 +50,6 @@ public class JudenKiAutonomous  extends LinearOpMode {
             tempHeading = tempHeading + 360;
 
         return (tempHeading);
-
-
     }
 }
 

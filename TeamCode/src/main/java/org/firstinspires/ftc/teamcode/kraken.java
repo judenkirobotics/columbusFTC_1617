@@ -377,14 +377,14 @@ import com.qualcomm.robotcore.hardware.Servo;
             return kraken_unleash_status;
 
         }
-/************************************************************************/
-/*                                  MAIN                                */
+        /************************************************************************/
+        /*                                  MAIN                                */
         /************************************************************************/
         @Override
         public void loop() {
-// Need to add calls to the broken out methods
-// also need to ensure the data goes between them smoothly
-// and ... I dunno, do you think there'll be a debug cycle ?  :D
+        // Need to add calls to the broken out methods
+        // also need to ensure the data goes between them smoothly
+        // and ... I dunno, do you think there'll be a debug cycle ?  :D
 
 
         /* whinch control  */

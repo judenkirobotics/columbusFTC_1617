@@ -17,9 +17,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 public class JudenKiDriverMode extends LinearOpMode {
 
     public JudenKiPlatform robot = new JudenKiPlatform();
-    //public HardwareMap hardwareMap = null; // will be set in OpModeManager.runActiveOpMode
-
-
+ 	//public HardwareMap hardwareMap = null; // will be set in OpModeManager.runActiveOpMode
     @Override
     public void runOpMode() throws InterruptedException {
         double forward;
@@ -41,12 +39,9 @@ public class JudenKiDriverMode extends LinearOpMode {
 
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
-            double prev_YStickPos = 0;
-            double prev_XStickPos = 0;
-
             double overDrive = (gamepad1.right_bumper) ? 1.0 : 0.6;
-            forward = stickFilter(gamepad1.left_stick_y * overDrive, prev_YStickPos);
-            drift = stickFilter(gamepad1.left_stick_x, prev_XStickPos);
+            forward = stickFilter(gamepad1.left_stick_y * overDrive, forward);
+            drift = stickFilter(gamepad1.left_stick_x, drift);
             //forward = gamepad1.left_stick_y;
 
             myDrive.driveMove(forward, drift);
@@ -58,8 +53,8 @@ public class JudenKiDriverMode extends LinearOpMode {
                 robot.catapultMotor.setPower(.0);
 
             // Send telemetry message to signify robot running;
-            telemetry.addData("left x",  "%.2f", gamepad1.left_stick_x);
-            telemetry.addData("right x", "%.2f", gamepad1.right_stick_x);
+            telemetry.addData("left y",  "%.2f", gamepad1.left_stick_y);
+            telemetry.addData("left x", "%.2f", gamepad1.left_stick_x);
             telemetry.addData("heading", robot.gyro.getHeading());
 /*            telemetry.addData("Bottom    Red   ", "%d", robot.colorTheBottom.red());
             telemetry.addData("Bottom    Green ", "%d", robot.colorTheBottom.green());
@@ -70,8 +65,6 @@ public class JudenKiDriverMode extends LinearOpMode {
 */
             telemetry.addData("Catapult Fried  Dill  Pickle  touch ", robot.touchCat.isPressed()    );
             telemetry.update();
-
-
 
             // Pause for metronome tick.  40 mS each cycle = update 25 times a second.
             waitForTick(40);
@@ -99,14 +92,14 @@ public class JudenKiDriverMode extends LinearOpMode {
     /*   Returns:  Filtered stick position                                  */
     /************************************************************************/
     public double stickFilter(double inStick, double prevStickPos) {
-        double HI_FILT_CONST = 0.96;
-        double MID_FILT_CONST = 0.5;
+        double HI_FILT_CONST = 0.6;
+        double MID_FILT_CONST = 0.4;
         double LOW_FILT_CONST = 0.1;
         double filterConstant = 0;  /*init to zero just in case */
         /* cube the input stick to give better response around zero */
         instick = instick * instick * instick;
         /* pick a filter constant based on stick position */
-        if (Math.abs(inStick) > 0.85) {
+        if (Math.abs(inStick) > 0.8) {
             filterConstant = (double) HI_FILT_CONST;
         } else if (Math.abs(inStick) > 0.6) {
             filterConstant = (double) MID_FILT_CONST;

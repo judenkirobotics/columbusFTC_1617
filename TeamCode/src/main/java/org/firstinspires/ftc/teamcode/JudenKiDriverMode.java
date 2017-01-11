@@ -39,7 +39,7 @@ public class JudenKiDriverMode extends LinearOpMode {
 
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
-            double overDrive = (gamepad1.right_bumper) ? 1.0 : 0.6;
+            double overDrive = (gamepad1.right_bumper) ? 1.0 : 0.8;
             forward = stickFilter(gamepad1.left_stick_y * overDrive, forward);
             drift = stickFilter(gamepad1.left_stick_x, drift);
             //forward = gamepad1.left_stick_y;

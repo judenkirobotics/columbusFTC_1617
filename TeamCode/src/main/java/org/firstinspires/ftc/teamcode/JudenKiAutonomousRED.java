@@ -27,7 +27,7 @@ public class JudenKiAutonomousRED  extends LinearOpMode {
         }
 
         //Try to turn -45 degrees (to heading of 315
-        myDrive.gyroTurn2(315, -1);
+        myDrive.gyroTurn2(45, 1);
 
         myDrive.allStop();
 

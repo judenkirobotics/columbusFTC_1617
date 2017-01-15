@@ -52,6 +52,3 @@ public class JudenKiAutonomousRED  extends LinearOpMode {
         return (tempHeading);
     }
 }
-
-
-*/
